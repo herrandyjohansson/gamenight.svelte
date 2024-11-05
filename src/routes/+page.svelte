@@ -11,7 +11,13 @@
   async function fetchGamers() {
     try {
       const response = await fetch(
-        "https://gamenight-fastapi.vercel.app/gamers"
+        "https://gamenight-fastapi.vercel.app/gamers",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
       );
       if (!response.ok) {
         throw new Error("Failed to fetch gamers");
