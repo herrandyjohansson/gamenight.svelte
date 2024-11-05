@@ -2,6 +2,32 @@
   import Counter from "./Counter.svelte";
   import welcome from "$lib/images/svelte-welcome.webp";
   import welcomeFallback from "$lib/images/svelte-welcome.png";
+  import { onMount } from "svelte";
+
+  let gamers: any = [];
+  let loading = false;
+  let error = null;
+
+  async function fetchGamers() {
+    try {
+      const response = await fetch(
+        "https://gamenight-fastapi.vercel.app/gamers"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch gamers");
+      }
+      const data = await response.json();
+      gamers = data;
+    } catch (err) {
+      // TODO - handle error
+      error = err;
+    } finally {
+      loading = false;
+    }
+  }
+
+  // fetch gamers on mount
+  onMount(fetchGamers);
 </script>
 
 <svelte:head>
@@ -20,6 +46,18 @@
 
     to your new<br /> GameNight app!
   </h1>
+
+  {#if loading}
+    <p>Loading...</p>
+  {:else if gamers.length > 0}
+    <ul>
+      {#each gamers as gamer}
+        <li>{gamer.name}</li>
+      {/each}
+    </ul>
+  {:else}
+    <p>No gamers found.</p>
+  {/if}
 
   <h2>
     try editing <strong>src/routes/+page.svelte</strong>
