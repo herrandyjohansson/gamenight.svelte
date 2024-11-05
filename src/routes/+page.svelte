@@ -26,8 +26,25 @@
     }
   }
 
+  async function fetchStarWarsData() {
+    try {
+      const response = await fetch("https://swapi.dev/api/people/1");
+      if (!response.ok) {
+        throw new Error("Failed to fetch Star Wars data");
+      }
+      const data = await response.json();
+      console.log(data);
+    } catch (err) {
+      // TODO - handle error
+      error = err;
+    } finally {
+      loading = false;
+    }
+  }
+
   // fetch gamers on mount
   onMount(fetchGamers);
+  onMount(fetchStarWarsData);
 </script>
 
 <svelte:head>
