@@ -1,7 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import FaSpinner from "svelte-fa";
-  import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
   export let gamer: { id: number; name: string };
   export let playableDays: string[];
