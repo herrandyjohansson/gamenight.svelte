@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import Gamers from "./Gamers.svelte";
+  import Game from "./Game.svelte";
 
   let gamers: any = [];
   let loading = false;
@@ -52,15 +53,12 @@
   {/if} -->
 
   <!-- <Counter /> -->
+  <Game />
   <Gamers />
 </section>
 
 <style>
   section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex: 0.6;
+    width: 100%;
   }
 </style>
