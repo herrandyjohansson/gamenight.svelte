@@ -12,56 +12,72 @@
     ["MON", "TUE", "WED", "THU", "FRI"], // Player 4 with all days selected
   ];
 
-  let gamers: any = [];
+  let gamers: any = [
+    {
+      id: 1,
+      name: "Player 1",
+    },
+    {
+      id: 2,
+      name: "Player 2",
+    },
+    {
+      id: 3,
+      name: "Player 3",
+    },
+  ];
   let loading = true;
   let error: Error | null = null;
 
   // Fetch gamers from API
-  async function fetchGamers() {
-    try {
-      const response = await fetch(
-        "https://gamenight-fastapi.vercel.app/gamers",
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) throw new Error("Failed to fetch gamers");
+  // async function fetchGamers() {
+  //   try {
+  //     const response = await fetch(
+  //       "https://gamenight-fastapi.vercel.app/gamers",
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     if (!response.ok) throw new Error("Failed to fetch gamers");
 
-      const data = await response.json();
-      gamers = data;
-    } catch (err) {
-      error = err as Error;
-    } finally {
-      loading = false;
-    }
-  }
+  //     const data = await response.json();
+  //     gamers = data;
+  //   } catch (err) {
+  //     error = err as Error;
+  //   } finally {
+  //     loading = false;
+  //   }
+  // }
 
-  onMount(fetchGamers);
+  // onMount(fetchGamers);
 </script>
 
 <section class="gamers">
-  {#if loading}
+  <!-- {#if loading}
     <p>Loading gamers...</p>
   {:else if error}
     <p>Error loading gamers: {error.message}</p>
-  {:else}
-    {#each gamers as gamer, index}
-      <Gamer
-        {gamer}
-        playableDays={PLAYABLE_DAYS}
-        selectedDaysFromApi={PLAYERS_SELECTED_DAYS_FROM_API[index] || []}
-        {index}
-      />
-    {/each}
-  {/if}
+  {:else} -->
+  {#each gamers as gamer, index}
+    <Gamer
+      {gamer}
+      playableDays={PLAYABLE_DAYS}
+      selectedDaysFromApi={PLAYERS_SELECTED_DAYS_FROM_API[index] || []}
+      {index}
+    />
+  {/each}
+  <!-- {/if} -->
 </section>
 
 <style>
   .gamers {
-    display: flex;
-    gap: 3rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(50px, 1fr));
+    grid-auto-rows: 1fr;
     flex-wrap: wrap;
+
+    gap: 3rem;
   }
 </style>

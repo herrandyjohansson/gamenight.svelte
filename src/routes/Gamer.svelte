@@ -1,5 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import FaSpinner from "svelte-fa";
+  import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
   export let gamer: { id: number; name: string };
   export let playableDays: string[];
@@ -8,6 +10,7 @@
 
   let selectedDays = new Set<string>();
   let hasChanges = false; // Tracks if there are any changes
+  let loading = false; // Tracks the loading state for API submission
 
   // Initialize selected days based on API data on mount
   onMount(() => {
@@ -45,16 +48,19 @@
   }
 
   // Submit to API
-  function submitToApi() {
+  async function submitToApi() {
     const weekData = prepareDataForApi();
     console.log("SEND TO API", weekData);
 
+    loading = true; // Start loading animation
+
     // Simulate API update
-    setTimeout(() => {
-      console.log("API SUBMIT");
-      selectedDaysFromApi = Array.from(selectedDays); // Update selectedDaysFromApi after submission
-      hasChanges = false; // Reset changes after submission
-    }, 1000);
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+
+    console.log("API SUBMIT");
+    selectedDaysFromApi = Array.from(selectedDays); // Update selectedDaysFromApi after submission
+    hasChanges = false; // Reset changes after submission
+    loading = false; // Stop loading animation
   }
 </script>
 
@@ -81,10 +87,16 @@
     </div>
     <button
       class="gamers__submit-button"
-      class:gamers__submit-button--visible={hasChanges}
       on:click={submitToApi}
+      disabled={loading}
+      class:loading
+      class:gamers__submit-button--visible={hasChanges}
     >
-      DO IT
+      {#if loading}
+        COOL
+      {:else}
+        DO IT
+      {/if}
     </button>
   </div>
 </section>
@@ -139,11 +151,68 @@
     border: none;
     border-radius: 0.5rem;
     cursor: pointer;
-    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #28a745;
+    transition:
+      background-color 0.3s ease,
+      opacity 0.3s ease;
+    pointer-events: none; /* Prevents any interactions */
   }
 
   .gamers__submit-button--visible {
     opacity: 1;
-    pointer-events: auto;
+    pointer-events: all;
+  }
+
+  .gamers__submit-button.loading {
+    /* animation: loadingPulse 1.5s infinite; */
+    animation: text-pulse 1s infinite;
+    background-color: transparent;
+    border: 1px solid #28a745;
+  }
+
+  .gamers__submit-button:disabled {
+    cursor: not-allowed;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes text-pulse {
+    0% {
+      color: #28a745;
+      transform: scale(1);
+    }
+    50% {
+      color: #1f7a33;
+      transform: scale(1.1);
+    }
+    100% {
+      color: #28a745;
+      transform: scale(1);
+    }
+  }
+
+  /* Loading animation with color pulsing effect */
+  @keyframes loadingPulse {
+    0% {
+      background-color: #28a745; /* Primary green */
+    }
+    50% {
+      background-color: #ffcc00; /* Amber to indicate awaiting response */
+    }
+    100% {
+      background-color: #28a745; /* Back to green */
+    }
   }
 </style>
