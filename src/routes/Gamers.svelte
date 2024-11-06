@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { fade } from "svelte/transition"; // Import fade transition
   import Gamer from "./Gamer.svelte";
 
   const PLAYABLE_DAYS = ["MON", "TUE", "WED", "THU", "FRI"];
@@ -55,7 +54,7 @@
   // onMount(fetchGamers);
 </script>
 
-<section class="gamers" in:fade={{ duration: 11600 }}>
+<section class="gamers">
   <!-- {#if loading}
     <p>Loading gamers...</p>
   {:else if error}
