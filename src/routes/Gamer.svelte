@@ -10,9 +10,10 @@
   let hasChanges = false; // Tracks if there are any changes
   let loading = false; // Tracks the loading state for API submission
 
-  // Initialize selected days based on API data on mount
+  let initialized = false;
   onMount(() => {
     selectedDays = new Set(selectedDaysFromApi);
+    initialized = true;
   });
 
   // Toggle day selection and check for changes
@@ -66,22 +67,24 @@
   <div class="gamers__player">
     <h3 class="gamers__player-title">P{index + 1}</h3>
     <div class="gamers__player-details">
-      {#each playableDays as day}
-        <button
-          type="button"
-          class="gamers__player-detail"
-          class:green={selectedDaysFromApi.includes(day) &&
-            selectedDays.has(day)}
-          class:green-border={selectedDays.has(day) &&
-            !selectedDaysFromApi.includes(day)}
-          class:red-border={!selectedDays.has(day) &&
-            selectedDaysFromApi.includes(day)}
-          on:click={() => toggleDay(day)}
-          aria-pressed={selectedDays.has(day)}
-        >
-          {day}
-        </button>
-      {/each}
+      {#if initialized}
+        {#each playableDays as day}
+          <button
+            type="button"
+            class="gamers__player-detail"
+            class:green={selectedDaysFromApi.includes(day) &&
+              selectedDays.has(day)}
+            class:green-border={selectedDays.has(day) &&
+              !selectedDaysFromApi.includes(day)}
+            class:red-border={!selectedDays.has(day) &&
+              selectedDaysFromApi.includes(day)}
+            on:click={() => toggleDay(day)}
+            aria-pressed={selectedDays.has(day)}
+          >
+            {day}
+          </button>
+        {/each}
+      {/if}
     </div>
     <button
       class="gamers__submit-button"
@@ -167,7 +170,6 @@
   }
 
   .gamers__submit-button.loading {
-    /* animation: loadingPulse 1.5s infinite; */
     animation: text-pulse 1s infinite;
     background-color: transparent;
     border: 1px solid #28a745;
@@ -175,15 +177,6 @@
 
   .gamers__submit-button:disabled {
     cursor: not-allowed;
-  }
-
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
   }
 
   @keyframes text-pulse {
@@ -198,19 +191,6 @@
     100% {
       color: #28a745;
       transform: scale(1);
-    }
-  }
-
-  /* Loading animation with color pulsing effect */
-  @keyframes loadingPulse {
-    0% {
-      background-color: #28a745; /* Primary green */
-    }
-    50% {
-      background-color: #ffcc00; /* Amber to indicate awaiting response */
-    }
-    100% {
-      background-color: #28a745; /* Back to green */
     }
   }
 </style>

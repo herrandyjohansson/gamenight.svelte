@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { fade } from "svelte/transition"; // Import fade transition
   import Gamer from "./Gamer.svelte";
 
   const PLAYABLE_DAYS = ["MON", "TUE", "WED", "THU", "FRI"];
@@ -54,19 +55,22 @@
   // onMount(fetchGamers);
 </script>
 
-<section class="gamers">
+<section class="gamers" in:fade={{ duration: 11600 }}>
   <!-- {#if loading}
     <p>Loading gamers...</p>
   {:else if error}
     <p>Error loading gamers: {error.message}</p>
   {:else} -->
   {#each gamers as gamer, index}
-    <Gamer
-      {gamer}
-      playableDays={PLAYABLE_DAYS}
-      selectedDaysFromApi={PLAYERS_SELECTED_DAYS_FROM_API[index] || []}
-      {index}
-    />
+    <div>
+      <!-- Apply fade with a custom duration -->
+      <Gamer
+        {gamer}
+        playableDays={PLAYABLE_DAYS}
+        selectedDaysFromApi={PLAYERS_SELECTED_DAYS_FROM_API[index] || []}
+        {index}
+      />
+    </div>
   {/each}
   <!-- {/if} -->
 </section>
@@ -77,7 +81,6 @@
     grid-template-columns: repeat(3, minmax(50px, 1fr));
     grid-auto-rows: 1fr;
     flex-wrap: wrap;
-
     gap: 3rem;
   }
 </style>
